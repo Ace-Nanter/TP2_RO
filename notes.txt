@@ -1,0 +1,18 @@
+nombre de jobs 		nombre de machines
+job 1
+  .
+  .	paires avec (n° machine, durée)
+  .
+job n
+
+
+Cahier des charges :
+
+1 lire les instances et les afficher
+2 vecteur de Bierwith ==> std::vector , évaluer le vectuer
+3 mouvements sur chemins critiques
+4 recherche locale et métaheuristique
+
+
+Bierwith : utiliser std::randomshuffle(begin, end) qui permet de mélanger de manière aléatoire le vecteur
+
