@@ -1,4 +1,5 @@
 #include "job.h"
+#include "Bierwith.h"
 
 
 const unsigned Job::NO_TIME     = std::numeric_limits<unsigned>::max();		// = infini

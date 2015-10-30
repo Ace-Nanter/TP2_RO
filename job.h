@@ -25,6 +25,7 @@ struct Job
   void clear () {next_ = prev_ = father_ = nullptr; starting_ = NO_TIME; location_ = NO_LOCATION;}
 
   void display_all (std::ostream &) const;
+
 };
 
 std::ostream & operator<< (std::ostream &, const Job &);
