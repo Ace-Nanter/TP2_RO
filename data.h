@@ -24,7 +24,7 @@ struct Data
   /* Et du coup les indices doivent correspondre		*/
   /*----------------------------------------------------*/
 
-  Job *  last_cp_; // TODO: mettre en in-class initialization			// Dernier job évalué ?
+  Job *  last_cp_;					// 
   unsigned makespan_;
 
   std::mt19937 rng_engine_;

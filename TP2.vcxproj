@@ -152,7 +152,7 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Bierwith.h" />
+    <ClInclude Include="Bierwirth.h" />
     <ClInclude Include="data.h" />
     <ClInclude Include="job.h" />
   </ItemGroup>

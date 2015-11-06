@@ -15,7 +15,7 @@ struct Job
 
   Job * next_;				// TODO: set an in-class initialization
   Job * prev_;				// TODO: set an in-class initialization
-  Job * father_;			// TODO: set an in-class initialization		// Job de départ qui permet de fixer la date de départ, permet de remonter le chemin critique = tête de liste
+  Job * father_;			// TODO: set an in-class initialization		// 
   unsigned starting_;		// TODO: set an in-class initialization		// Temps où le job démarre
   unsigned location_;		// TODO: set an in-class initialization		// Machine où il se trouve
   

@@ -1,12 +1,12 @@
 #include "data.h"
-
+#include "Bierwirth.h"
 #include <fstream>
 #include <string>
 #include <sstream>
 #include <cstdlib>
 
 
-Data::Data (const std::string & filename) : name_(filename), jobs_(0), last_cp_(nullptr)
+Data::Data (const std::string & filename) : name_(filename), jobs_(0), last_cp_(nullptr), makespan_(0)
 {
   std::ifstream is(filename.c_str());
 

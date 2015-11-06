@@ -35,7 +35,7 @@
     <ClInclude Include="job.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="Bierwith.h">
+    <ClInclude Include="Bierwirth.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>
