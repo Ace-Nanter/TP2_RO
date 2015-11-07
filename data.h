@@ -33,6 +33,7 @@ struct Data
   void clear ();										// ?
 
   void display_all (std::ostream &) const;				// Affichage des données
+  Data::Data(const Data & d);
 };
 
 std::ostream & operator<< (std::ostream &, const Data &);

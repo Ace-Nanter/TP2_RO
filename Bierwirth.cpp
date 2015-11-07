@@ -17,12 +17,12 @@ Bierwirth::Bierwirth(Data d) : d_(d),
 	std::random_shuffle(v_.begin(), v_.end());
 }
 
-Bierwirth::Bierwirth(const Bierwirth& b) {
-	d_=b.d_;
-	v_ = b.v_;
-	tabJob_=b.tabJob_;
-	tabJobOpe_=b.tabJobOpe_;
-	tabOpe_=b.tabOpe_;
+Bierwirth::Bierwirth(const Bierwirth& b):
+	d_(b.d_),
+	v_(b.v_),
+	tabJob_(b.tabJob_),
+	tabJobOpe_(b.tabJobOpe_),
+	tabOpe_(b.tabOpe_){
 }
 
 void Bierwirth::display() {
@@ -118,4 +118,14 @@ void Bierwirth::afficher_sequences() {
 		std::cout << "Sequence de la machine num. " << i << std::endl;
 		tabOpe_[i].afficher_sequence();
 	}
+}
+
+bool Bierwirth::amelioration(Bierwirth& b2) {
+	Job* cur = b2.d_.last_cp_;
+	while (cur != NULL) {
+		if (cur->prev_ == cur->father_) {
+
+		}
+	}
+
 }

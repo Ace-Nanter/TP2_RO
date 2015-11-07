@@ -146,7 +146,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Bierwith.cpp" />
+    <ClCompile Include="Bierwirth.cpp" />
     <ClCompile Include="data.cpp" />
     <ClCompile Include="job.cpp" />
     <ClCompile Include="main.cpp" />

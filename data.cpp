@@ -44,6 +44,17 @@ Data::Data (const std::string & filename) : name_(filename), jobs_(0), last_cp_(
   }
 }
 
+Data::Data(const Data & d) {
+	nbJobs_=d.nbJobs_;
+	nbMachines_=d.nbMachines_;
+	jobs_=d.jobs_;
+	first_=d.first_;
+	last_=d.last_;
+	last_cp_=d.last_cp_;
+	makespan_=d.makespan_;
+	rng_engine_=d.rng_engine_;
+}
+
 void Data::clear () {
   for (auto line : jobs_)
   {

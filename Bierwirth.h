@@ -34,7 +34,7 @@ private:
 	std::vector<numjob> tabJob_;
 	std::vector< std::vector<Job> > tabJobOpe_;		//x=ope, y=Job
 	std::vector<liste_machines> tabOpe_;
-	
+
 public:
 	Bierwirth(Data d);
 	Bierwirth(const Bierwirth& b);
@@ -42,4 +42,5 @@ public:
 	void display();
 	void afficher_sequences();
 	void afficher_chemin_critique();
+	bool amelioration(Bierwirth& b2);
 };
