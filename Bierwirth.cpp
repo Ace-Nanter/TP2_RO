@@ -5,7 +5,9 @@ Bierwirth::Bierwirth(Data d) : d_(d),
 								bierwirth_vector_(d.nbJobs_ * d.nbMachines_),
 								tabJob_(d.nbJobs_, numjob()),
 								tabOpe_(d.nbMachines_,  liste_machines()),
-								tabJobOpe_(d.nbJobs_,std::vector<Job>(d.nbMachines_, Job()))
+								tabJobOpe_(d.nbJobs_,std::vector<Job>(d.nbMachines_, Job())),
+								makespan_(0),
+								last_cp_(nullptr)
 {
 	// Initialisation du vecteur de Bierwith
 	for (unsigned i = 0; i < d.jobs_.size(); i++) {
@@ -22,7 +24,9 @@ Bierwirth::Bierwirth(const Bierwirth& b):
 	bierwirth_vector_(b.bierwirth_vector_),
 	tabJob_(b.tabJob_),
 	tabJobOpe_(b.tabJobOpe_),
-	tabOpe_(b.tabOpe_){
+	tabOpe_(b.tabOpe_),
+	makespan_(b.makespan_),
+	last_cp_(b.last_cp_){
 }
 
 void Bierwirth::display() {
@@ -45,7 +49,7 @@ void Bierwirth::evaluer(std::vector<Job*> b_new) {
 
 	bierwirth_vector_ = b_new;
 
-	//On nettoie les tableaux au cas ou il existe deja avant
+	//On reinitialise les tableaux et les varibales au cas ou il existe deja avant
 	for (unsigned i=0;i < tabJob_.size();i++) {
 		tabJob_[i].inc = 0;
 		tabJob_[i].duree = 0;
@@ -55,6 +59,9 @@ void Bierwirth::evaluer(std::vector<Job*> b_new) {
 		tabOpe_[i].last_op = nullptr;
 		tabOpe_[i].duree = 0;
 	}
+
+	makespan_ = 0;
+	last_cp_ = nullptr;
 
 	for (unsigned i = 0; i < bierwirth_vector_.size(); i++) {
 		// Mise en place des variables temporaires
@@ -68,6 +75,7 @@ void Bierwirth::evaluer(std::vector<Job*> b_new) {
 		//Init d'element courant
 		elt_tmp->machine_ = machine_tmp;
 		elt_tmp->item_ = item_tmp;
+		elt_tmp->location_ = i;
 
 		// On fait pointer le pointeur next sur l'element suivant(si l'element tmp existe, ce qui n'est pas le cas a la premiere iteration)
 		if(tabOpe_[machine_tmp].last_op != nullptr)
@@ -83,11 +91,11 @@ void Bierwirth::evaluer(std::vector<Job*> b_new) {
 
 		//On compare la duree du job et de la machine lie a cet element
 		if (tabJob_[elt_tmp->item_].duree < tabOpe_[elt_tmp->machine_].duree) {
-			elt_tmp->father_ = elt_tmp->prev_;//si la duree de la machine est la plus grande le father est egale a l'ele prec de l'element
+			elt_tmp->father_ = elt_tmp->prev_;													//si la duree de la machine est la plus grande le father est egale a l'ele prec de l'element
 		}
-		else {//si la duree du job est le plus grand le father correspond à la case precedente du job dans le tabJobOpe
-			bool_tmp = tabJob_[elt_tmp->item_].inc - 2;//bug si on fait le calcul dans le if ...
-			if (bool_tmp >= 0) {//On evite une seg fault
+		else{																					//si la duree du job est le plus grand le father correspond à la case precedente du job dans le tabJobOpe
+			bool_tmp = tabJob_[elt_tmp->item_].inc - 2;											//bug si on fait le calcul dans le if ...
+			if (bool_tmp >= 0) {																//On evite une seg fault
 				elt_tmp->father_ = &tabJobOpe_[elt_tmp->item_][tabJob_[elt_tmp->item_].inc - 2];
 			}
 			else {
@@ -95,11 +103,16 @@ void Bierwirth::evaluer(std::vector<Job*> b_new) {
 			}
 		}
 
-		if (d_.makespan_ < tabJob_[item_tmp].duree)
+		if (makespan_ < tabJob_[item_tmp].duree)
 		{
-			d_.makespan_ = tabJob_[item_tmp].duree;
-			d_.last_cp_ = elt_tmp;
+			makespan_ = tabJob_[item_tmp].duree;
+			last_cp_ = elt_tmp;
 		}
+	}
+
+	if (d_.makespan_ != makespan_) {
+		d_.makespan_ = makespan_;
+		d_.last_cp_ = last_cp_;
 	}
 }
 
@@ -120,7 +133,7 @@ void liste_machines::afficher_sequence() {
 }
 
 void Bierwirth::afficher_chemin_critique() {
-	Job * tmp = d_.last_cp_;
+	Job * tmp = last_cp_;
 	std::cout << tmp->item_;
 	tmp = tmp->father_;
 	while (tmp != NULL) {
@@ -142,10 +155,10 @@ bool Bierwirth::amelioration(Bierwirth& b2) {
 	Job* cur = b2.d_.last_cp_;
 	bool stop = false;														//si stop = false on a parcourue tout le chemin critique sans trouver d'arc disjonctif
 	while (cur != NULL && !stop) {
-		if (cur->prev_ == cur->father_) {									//si l'arc courant est disjonctif
-			std::swap(b2.bierwirth_vector_[0], b2.bierwirth_vector_[1]);	//on echange les 2 jobs dans bierwirth
+		if (cur->prev_!=nullptr && cur->father_!=nullptr && cur ->prev_ == cur->father_) {									//si l'arc courant est disjonctif
+			std::swap(b2.bierwirth_vector_[cur->location_], b2.bierwirth_vector_[cur->father_->location_]);	//on echange les 2 jobs dans bierwirth
 			b2.evaluer(b2.bierwirth_vector_);								//On réévalue bierwirth
-			if (b2.d_.makespan_ < d_.makespan_) {							//Si le makespan est meilleur -> on actualise nos element (le chemin critique)
+			if (b2.makespan_ < makespan_) {									//Si le makespan est meilleur -> on actualise nos element (le chemin critique)
 				tabJobOpe_ = b2.tabJobOpe_;
 				tabJob_ = b2.tabJob_;
 				tabOpe_ = b2.tabOpe_;

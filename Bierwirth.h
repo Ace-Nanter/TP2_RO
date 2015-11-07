@@ -35,6 +35,9 @@ private:
 	std::vector< std::vector<Job> > tabJobOpe_;		//x=ope, y=Job
 	std::vector<liste_machines> tabOpe_;
 
+	unsigned	makespan_;							//Makespan et last operation local au vecteur courant de Bierwirth
+	Job*		last_cp_;
+
 public:
 	Bierwirth(Data d);
 	Bierwirth(const Bierwirth& b);
