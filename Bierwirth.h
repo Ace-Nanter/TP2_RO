@@ -37,6 +37,9 @@ private:
 	std::vector<liste_items> tabItem_;					// Ordre des machines pour une pièce
 	std::vector<liste_machines> tabOpe_;			// Ordre des pièces par machine
 
+	unsigned	makespan_;							//Makespan et last operation local au vecteur courant de Bierwirth
+	Job*		last_cp_;
+
 public:
 	Bierwirth(Data&);
 	Bierwirth::Bierwirth(Data &d, std::vector<unsigned> v);
