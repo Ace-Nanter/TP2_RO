@@ -3,6 +3,7 @@
 #include <iostream>
 #include <algorithm>
 #include <vector>
+#include <stack>
 
 #include "data.h"
 
@@ -13,30 +14,32 @@
 /* machine                        */
 /*--------------------------------*/
 struct liste_machines {
-	Job* last_op;
+	std::vector<Job *> jobs;	// Pièces qui passent par la machine
+	Job* last_op;				// Dernière opération sur la machine
 	unsigned duree;				// Date de l'opération
 
 	liste_machines() :last_op(nullptr), duree(0) { }
 	void afficher_sequence();
 };
 
-struct numjob{
-	unsigned inc;				// Nombre de fois où le job est appelé
-	unsigned duree;				// Date à laquelle le job est appelée
+struct liste_items{
+	std::vector<Job *> machines;	// Machine par lesquelles la pièce est passée
+	Job* last_op;					// Dernière opération sur la pièce
+	unsigned duree;					// Date à laquelle la pièce est appelée
 
-	numjob::numjob() :inc(0), duree(0) { }
+	liste_items::liste_items() :last_op(nullptr), duree(0) { }
 };
 
 class Bierwirth {
 private:
-	Data d_;
+	Data& d_;
 	std::vector<Job *> bierwirth_vector_;			// Vect de bierwith
-	std::vector<numjob> tabJob_;
-	std::vector< std::vector<Job> > tabJobOpe_;		//x=ope, y=Job
-	std::vector<liste_machines> tabOpe_;
+	std::vector<liste_items> tabItem_;					// Ordre des machines pour une pièce
+	std::vector<liste_machines> tabOpe_;			// Ordre des pièces par machine
 
 public:
-	Bierwirth(Data d);
+	Bierwirth(Data&);
+	Bierwirth::Bierwirth(Data &d, std::vector<unsigned> v);
 	Bierwirth(const Bierwirth& b);
 	void evaluer(std::vector<Job*> b_new);
 	void evaluer();
@@ -44,4 +47,6 @@ public:
 	void afficher_sequences();
 	void afficher_chemin_critique();
 	bool amelioration(Bierwirth& b2);
+
+	class ExceptionIncorrectSize : public std::exception { };
 };

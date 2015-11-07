@@ -1,11 +1,10 @@
 #include "Bierwirth.h"
 #include <iostream>
 
-Bierwirth::Bierwirth(Data d) : d_(d),
+Bierwirth::Bierwirth(Data& d) : d_(d),
 								bierwirth_vector_(d.nbJobs_ * d.nbMachines_),
-								tabJob_(d.nbJobs_, numjob()),
-								tabOpe_(d.nbMachines_,  liste_machines()),
-								tabJobOpe_(d.nbJobs_,std::vector<Job>(d.nbMachines_, Job()))
+								tabItem_(d.nbJobs_, liste_items()),
+								tabOpe_(d.nbMachines_,  liste_machines())
 {
 	// Initialisation du vecteur de Bierwith
 	for (unsigned i = 0; i < d.jobs_.size(); i++) {
@@ -14,91 +13,148 @@ Bierwirth::Bierwirth(Data d) : d_(d),
 			bierwirth_vector_[j * d.jobs_.size() + i]->location_ = j * d.jobs_.size() + i;
 		}
 	}
+
+	// On mélange
 	std::random_shuffle(bierwirth_vector_.begin(), bierwirth_vector_.end());
+}
+
+Bierwirth::Bierwirth(Data &d, std::vector<unsigned> v)
+	: d_(d),
+	bierwirth_vector_(d.nbJobs_ * d.nbMachines_),
+	tabItem_(d.nbJobs_, liste_items()),
+	tabOpe_(d.nbMachines_, liste_machines())
+{
+	std::vector<unsigned> index(d.nbJobs_, 0);
+
+	if (v.size() != bierwirth_vector_.size())
+		throw new ExceptionIncorrectSize();
+
+	for (unsigned i = 0; i < v.size(); i++) {
+		bierwirth_vector_[i] = &(d_.jobs_[v[i]][index[v[i]]]);
+		index[v[i]]++;
+	}
 }
 
 Bierwirth::Bierwirth(const Bierwirth& b):
 	d_(b.d_),
 	bierwirth_vector_(b.bierwirth_vector_),
-	tabJob_(b.tabJob_),
-	tabJobOpe_(b.tabJobOpe_),
-	tabOpe_(b.tabOpe_){
-}
+	tabItem_(b.tabItem_),
+	tabOpe_(b.tabOpe_) { }
 
 void Bierwirth::display() {
 	
-	for (unsigned i = 0; i < bierwirth_vector_.size(); i++)
-		std::cout << bierwirth_vector_[i]->item_ << " ; ";
+	for (unsigned i = 0; i < bierwirth_vector_.size(); i++) {
+		std::cout << "(" << bierwirth_vector_[i]->item_ << ",";
+		std::cout << bierwirth_vector_[i]->machine_ << ",";
+		std::cout << bierwirth_vector_[i]->duration_ << ") ; ";
+	}
 
 	std::cout << std::endl;
 }
 
 void Bierwirth::evaluer(std::vector<Job*> b_new) {
-	// Variables temporaires
-	unsigned item_tmp;
-	unsigned machine_tmp;
-	unsigned duration_tmp;
-	int bool_tmp;
-
-	Job* elt_tmp;//elt_tmp est l'elt courant de tabJobOpe
-	liste_machines lm_tmp;//lm est la case courante de tabOpe
+	Job * cur;										// Pointeur actuel et précédent
+	liste_machines * machine_tmp;					// Variable machine
+	liste_items * item_tmp;							// Variable pièce
+	unsigned time, wait_machine, wait_item;			// Variables de temps
 
 	bierwirth_vector_ = b_new;
-
-	//On nettoie les tableaux au cas ou il existe deja avant
-	for (unsigned i=0;i < tabJob_.size();i++) {
-		tabJob_[i].inc = 0;
-		tabJob_[i].duree = 0;
-	}
+	
+	// On nettoie les tableaux au cas où il existe deja avant
+	for (unsigned i=0;i < tabItem_.size();i++) {
+		tabItem_[i].machines.clear();
+		tabItem_[i].last_op = nullptr;
+		tabItem_[i].duree = 0;
+	}		// Nettoyage du vecteur des pièces
 
 	for (unsigned i=0;i < tabOpe_.size();i++) {
+		tabOpe_[i].jobs.clear();
 		tabOpe_[i].last_op = nullptr;
 		tabOpe_[i].duree = 0;
-	}
+	}		// Nettoyage du vecteur des machines
 
-	for (unsigned i = 0; i < bierwirth_vector_.size(); i++) {
-		// Mise en place des variables temporaires
-		item_tmp = bierwirth_vector_[i]->item_;							// Récupération du numéro du job
-		machine_tmp = bierwirth_vector_[i]->machine_;						// Récupération du numéro machine
-		duration_tmp = bierwirth_vector_[i]->duration_;
-		
-		elt_tmp=&(tabJobOpe_[item_tmp][tabJob_[item_tmp].inc]);
-		lm_tmp = tabOpe_[machine_tmp];
+	// Pour le premier job
+	cur = bierwirth_vector_[0];
+	cur->prev_ = nullptr;									// Pas de précédent
+	cur->father_ = nullptr;									// Pas de père car c'est le premier
+	cur->starting_ = 0;										// Démarre à t = 0
+	cur->location_ = 0;										// Premier élément du tableau
 
-		//Init d'element courant
-		elt_tmp->machine_ = machine_tmp;
-		elt_tmp->item_ = item_tmp;
+	// Mise à jour des données par machine
+	tabOpe_[cur->machine_].jobs.push_back(cur);				// On l'ajoute à la machine
+	tabOpe_[cur->machine_].last_op = cur;					// C'est la dernière opération
+	tabOpe_[cur->machine_].duree += cur->duration_;			// Mise à jour de la durée
 
-		// On fait pointer le pointeur next sur l'element suivant(si l'element tmp existe, ce qui n'est pas le cas a la premiere iteration)
-		if(tabOpe_[machine_tmp].last_op != nullptr)
-			tabOpe_[machine_tmp].last_op->next_=elt_tmp;	// On lie la dernière de la machine donnée
-		elt_tmp->prev_ = tabOpe_[machine_tmp].last_op;	// On fait pointer sur la derniere op traite
-		elt_tmp->starting_ = tabOpe_[machine_tmp].duree;		// La date de depart est egale a la duree totale courante
+	// Mise à jour des données par pièce
+	tabItem_[cur->item_].machines.push_back(cur);			// Première opération pour la pièce
+	tabItem_[cur->item_].last_op = cur;						// C'est la dernière opération
+	tabItem_[cur->item_].duree += cur->duration_;			// Mise à jour de la durée
+	
+	for (unsigned i = 1; i < bierwirth_vector_.size(); i++) {
+		// Mise en place des variables
+		cur = bierwirth_vector_[i];
+		machine_tmp = &(tabOpe_[cur->machine_]);
+		item_tmp = &(tabItem_[cur->item_]);
 
-		tabOpe_[machine_tmp].last_op = elt_tmp;				//elt_tmp devient la derniere op, on fait pointer tabOpe dessus
-		tabOpe_[machine_tmp].duree += duration_tmp;			//on incremente la duree totale
+		// Chainage
+		bierwirth_vector_[i - 1]->next_ = cur;				// Chainage suivant
+		cur->prev_ = bierwirth_vector_[i - 1];				// Chainage précédent
 
-		tabJob_[item_tmp].inc++;							// Incrémentation de l'appel du job
-		tabJob_[item_tmp].duree += duration_tmp;			// Ecriture de la duree totale
+		cur->location_ = i;									// Enregistrement de la place dans Bierwirth
 
-		//On compare la duree du job et de la machine lie a cet element
-		if (tabJob_[elt_tmp->item_].duree < tabOpe_[elt_tmp->machine_].duree) {
-			elt_tmp->father_ = elt_tmp->prev_;//si la duree de la machine est la plus grande le father est egale a l'ele prec de l'element
+		// Gestion du temps
+		if (machine_tmp->duree > item_tmp->duree) {			// On attend la machine
+			time = machine_tmp->duree;
+			wait_machine = 0;								// La machine n'attend pas
+			wait_item = machine_tmp->duree - item_tmp->duree;	// La pièce attend après la machine
+
+			// Father est le dernier job exécuté par la machine
+			cur->father_ = (machine_tmp->jobs.size() < 1) ? nullptr
+				:machine_tmp->jobs.at(machine_tmp->jobs.size() - 1);
+						// Si on n'a pas encore d'éléments on met nullptr
 		}
-		else {//si la duree du job est le plus grand le father correspond à la case precedente du job dans le tabJobOpe
-			bool_tmp = tabJob_[elt_tmp->item_].inc - 2;//bug si on fait le calcul dans le if ...
-			if (bool_tmp >= 0) {//On evite une seg fault
-				elt_tmp->father_ = &tabJobOpe_[elt_tmp->item_][tabJob_[elt_tmp->item_].inc - 2];
-			}
-			else {
-				elt_tmp->father_ = nullptr;
-			}
+		else if (machine_tmp->duree == item_tmp->duree) {		// Pas d'attente
+			time = machine_tmp->duree;
+			wait_machine = 0;
+			wait_item = 0;
+
+			// Choix arbitraire ? Je prend la pièce comme référence
+			
+			cur->father_ = (std::max(item_tmp->machines.size(), machine_tmp->jobs.size()) < 1) ? nullptr
+				: (item_tmp->machines.size() >= machine_tmp->jobs.size()) ?
+				item_tmp->last_op
+				: machine_tmp->last_op;
+		}
+		else {														// On attend la pièce d'une autre machine
+			time = item_tmp->duree;
+			wait_machine = item_tmp->duree - machine_tmp->duree;	// La machine est obligée d'attendre
+			wait_item = 0;											// La pièce n'attend pas
+			// Father est la dernière opération effectuée sur la pièce
+			cur->father_ = (item_tmp->machines.size() < 1) ? nullptr
+				: item_tmp->machines.at(item_tmp->machines.size() - 1);
+			// Si on n'a pas encore d'éléments on met nullptr
 		}
 
-		if (d_.makespan_ < tabJob_[item_tmp].duree)
-		{
-			d_.makespan_ = tabJob_[item_tmp].duree;
-			d_.last_cp_ = elt_tmp;
+		// Mise à jour des données par machine
+		machine_tmp->jobs.push_back(cur);
+		machine_tmp->last_op = cur;
+		machine_tmp->duree += wait_machine + cur->duration_;
+
+		// Mise à jour des données par pièce
+		item_tmp->machines.push_back(cur);
+		item_tmp->last_op = cur;
+		item_tmp->duree += wait_item + cur->duration_;
+	}	// Fin for principal
+
+	// Evaluation du makespan et de last_op
+	d_.makespan_ = tabItem_[0].duree;
+	d_.last_cp_ = tabItem_[0].last_op;								// Par défaut on prend la première pièce
+
+	for (unsigned i = 0; i < tabItem_.size(); i++)
+	{
+		if (tabItem_[i].duree > d_.makespan_) {
+			d_.makespan_ = tabItem_[i].duree;						// Mise à jour du makespan
+			d_.last_cp_ = tabItem_[i].last_op;						// Mise à jour de la dernière opération
 		}
 	}
 }
@@ -109,27 +165,34 @@ void Bierwirth::evaluer()
 }
 
 void liste_machines::afficher_sequence() {
-	Job * tmp = last_op;
-	std::cout << tmp->item_;
-	tmp = tmp->prev_;
-	while (tmp != NULL) {
-		std::cout << " <- " << tmp->item_ ;
-		tmp = tmp->prev_;
-	}
+	for (unsigned i = 0; i < jobs.size(); i++)
+		std::cout << jobs[i]->item_ << " ";
+
 	std::cout << std::endl;
 }
 
+// TODO : refaire le chemin critique
 void Bierwirth::afficher_chemin_critique() {
+	std::stack<Job *> p;				// Pile pour afficher le chemin critique dans le bon ordre
 	Job * tmp = d_.last_cp_;
-	std::cout << tmp->item_;
+
+	p.push(tmp);
+	
 	tmp = tmp->father_;
-	while (tmp != NULL) {
-		std::cout << " <- " << tmp->item_;
+	while(tmp != nullptr) {
+		p.push(tmp);
 		tmp = tmp->father_;
 	}
-	std::cout << std::endl;
+	std::cout << "Chemin critique : " << std::endl;
+	while ( !p.empty() ) {
+		std::cout << "Job : " << p.top()->item_;
+		std::cout << "\tMachine : " << p.top()->machine_;
+		std::cout << std::endl;
+		p.pop();
+	}
+	std::cout << std::endl << std::endl;
+	std::cout << "Makespan : " << d_.makespan_ << std::endl;
 }
-
 
 void Bierwirth::afficher_sequences() {
 	for (unsigned i = 0; i < tabOpe_.size(); i++) {
@@ -138,6 +201,7 @@ void Bierwirth::afficher_sequences() {
 	}
 }
 
+/*
 bool Bierwirth::amelioration(Bierwirth& b2) {
 	Job* cur = b2.d_.last_cp_;
 	bool stop = false;														//si stop = false on a parcourue tout le chemin critique sans trouver d'arc disjonctif
@@ -147,7 +211,7 @@ bool Bierwirth::amelioration(Bierwirth& b2) {
 			b2.evaluer(b2.bierwirth_vector_);								//On réévalue bierwirth
 			if (b2.d_.makespan_ < d_.makespan_) {							//Si le makespan est meilleur -> on actualise nos element (le chemin critique)
 				tabJobOpe_ = b2.tabJobOpe_;
-				tabJob_ = b2.tabJob_;
+				tabItem_ = b2.tabItem_;
 				tabOpe_ = b2.tabOpe_;
 				stop = true;												//si stop = true, on a trouver une solution
 			}
@@ -155,4 +219,4 @@ bool Bierwirth::amelioration(Bierwirth& b2) {
 		cur = cur->father_;													//increment
 	}
 	return stop;															//stop equivaut a un booleen repondant a si on a trouver bierwirth
-}
+}*/
