@@ -1,25 +1,25 @@
 #include "Bierwirth.h"
+#include <iostream>
 
 Bierwirth::Bierwirth(Data d) : d_(d),
-								v_(d.nbJobs_ * d.nbMachines_),
+								bierwirth_vector_(d.nbJobs_ * d.nbMachines_),
 								tabJob_(d.nbJobs_, numjob()),
 								tabOpe_(d.nbMachines_,  liste_machines()),
 								tabJobOpe_(d.nbJobs_,std::vector<Job>(d.nbMachines_, Job()))
 {
-	unsigned i;										// Variable de boucle
-
 	// Initialisation du vecteur de Bierwith
-	for (i = 0; i < d.jobs_.size(); i++) {
+	for (unsigned i = 0; i < d.jobs_.size(); i++) {
 		for (unsigned j = 0; j < d.jobs_[i].size(); j++) {
-			v_[j * d.jobs_.size() + i] = &(d_.jobs_.at(i).at(j));
+			bierwirth_vector_[j * d.jobs_.size() + i] = &(d_.jobs_.at(i).at(j));
+			bierwirth_vector_[j * d.jobs_.size() + i]->location_ = j * d.jobs_.size() + i;
 		}
 	}
-	std::random_shuffle(v_.begin(), v_.end());
+	std::random_shuffle(bierwirth_vector_.begin(), bierwirth_vector_.end());
 }
 
 Bierwirth::Bierwirth(const Bierwirth& b):
 	d_(b.d_),
-	v_(b.v_),
+	bierwirth_vector_(b.bierwirth_vector_),
 	tabJob_(b.tabJob_),
 	tabJobOpe_(b.tabJobOpe_),
 	tabOpe_(b.tabOpe_){
@@ -27,13 +27,13 @@ Bierwirth::Bierwirth(const Bierwirth& b):
 
 void Bierwirth::display() {
 	
-	for (unsigned i = 0; i < v_.size(); i++)
-		std::cout << v_[i]->item_ << " ; ";
+	for (unsigned i = 0; i < bierwirth_vector_.size(); i++)
+		std::cout << bierwirth_vector_[i]->item_ << " ; ";
 
 	std::cout << std::endl;
 }
 
-void Bierwirth::evaluer() {
+void Bierwirth::evaluer(std::vector<Job*> b_new) {
 	// Variables temporaires
 	unsigned item_tmp;
 	unsigned machine_tmp;
@@ -43,14 +43,27 @@ void Bierwirth::evaluer() {
 	Job* elt_tmp;//elt_tmp est l'elt courant de tabJobOpe
 	liste_machines lm_tmp;//lm est la case courante de tabOpe
 
-	for (unsigned i = 0; i < v_.size(); i++) {
+	bierwirth_vector_ = b_new;
+
+	//On nettoie les tableaux au cas ou il existe deja avant
+	for (unsigned i=0;i < tabJob_.size();i++) {
+		tabJob_[i].inc = 0;
+		tabJob_[i].duree = 0;
+	}
+
+	for (unsigned i=0;i < tabOpe_.size();i++) {
+		tabOpe_[i].last_op = nullptr;
+		tabOpe_[i].duree = 0;
+	}
+
+	for (unsigned i = 0; i < bierwirth_vector_.size(); i++) {
 		// Mise en place des variables temporaires
-		item_tmp = v_[i]->item_;							// Récupération du numéro du job
-		machine_tmp = v_[i]->machine_;						// Récupération du numéro machine
-		duration_tmp = v_[i]->duration_;
+		item_tmp = bierwirth_vector_[i]->item_;							// Récupération du numéro du job
+		machine_tmp = bierwirth_vector_[i]->machine_;						// Récupération du numéro machine
+		duration_tmp = bierwirth_vector_[i]->duration_;
 		
 		elt_tmp=&(tabJobOpe_[item_tmp][tabJob_[item_tmp].inc]);
-		lm_tmp = tabOpe_[v_[i]->machine_];
+		lm_tmp = tabOpe_[machine_tmp];
 
 		//Init d'element courant
 		elt_tmp->machine_ = machine_tmp;
@@ -90,6 +103,11 @@ void Bierwirth::evaluer() {
 	}
 }
 
+void Bierwirth::evaluer()
+{
+	evaluer(bierwirth_vector_);
+}
+
 void liste_machines::afficher_sequence() {
 	Job * tmp = last_op;
 	std::cout << tmp->item_;
@@ -122,10 +140,19 @@ void Bierwirth::afficher_sequences() {
 
 bool Bierwirth::amelioration(Bierwirth& b2) {
 	Job* cur = b2.d_.last_cp_;
-	while (cur != NULL) {
-		if (cur->prev_ == cur->father_) {
-
+	bool stop = false;														//si stop = false on a parcourue tout le chemin critique sans trouver d'arc disjonctif
+	while (cur != NULL && !stop) {
+		if (cur->prev_ == cur->father_) {									//si l'arc courant est disjonctif
+			std::swap(b2.bierwirth_vector_[0], b2.bierwirth_vector_[1]);	//on echange les 2 jobs dans bierwirth
+			b2.evaluer(b2.bierwirth_vector_);								//On réévalue bierwirth
+			if (b2.d_.makespan_ < d_.makespan_) {							//Si le makespan est meilleur -> on actualise nos element (le chemin critique)
+				tabJobOpe_ = b2.tabJobOpe_;
+				tabJob_ = b2.tabJob_;
+				tabOpe_ = b2.tabOpe_;
+				stop = true;												//si stop = true, on a trouver une solution
+			}
 		}
+		cur = cur->father_;													//increment
 	}
-
+	return stop;															//stop equivaut a un booleen repondant a si on a trouver bierwirth
 }

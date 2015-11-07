@@ -30,7 +30,7 @@ struct numjob{
 class Bierwirth {
 private:
 	Data d_;
-	std::vector<Job *> v_;								// Vect de bierwith
+	std::vector<Job *> bierwirth_vector_;			// Vect de bierwith
 	std::vector<numjob> tabJob_;
 	std::vector< std::vector<Job> > tabJobOpe_;		//x=ope, y=Job
 	std::vector<liste_machines> tabOpe_;
@@ -38,6 +38,7 @@ private:
 public:
 	Bierwirth(Data d);
 	Bierwirth(const Bierwirth& b);
+	void evaluer(std::vector<Job*> b_new);
 	void evaluer();
 	void display();
 	void afficher_sequences();

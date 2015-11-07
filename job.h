@@ -17,7 +17,7 @@ struct Job
   Job * prev_;				// TODO: set an in-class initialization
   Job * father_;			// TODO: set an in-class initialization		// 
   unsigned starting_;		// TODO: set an in-class initialization		// Temps où le job démarre
-  unsigned location_;		// TODO: set an in-class initialization		// Machine où il se trouve
+  unsigned location_;		// TODO: set an in-class initialization		// Position ou il se trouve sur Bierwirth
   
   Job () : item_(0), machine_(0), duration_(0), next_(nullptr), prev_(nullptr), father_(nullptr), starting_(NO_TIME), location_(NO_LOCATION) {}
   //Job (unsigned i, unsigned m, unsigned d) : item_(i), machine_(m), duration_(d), next_(nullptr), prev_(nullptr), father_(nullptr), starting_(NO_TIME) {}

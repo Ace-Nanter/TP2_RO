@@ -2,20 +2,14 @@
 #include "data.h"
 #include "Bierwirth.h"
 
-Bierwirth recherche_locale(Bierwirth& b0);
+void recherche_locale(Bierwirth& b0);
 
-Bierwirth recherche_locale(Bierwirth& b0) {
-	bool changer,stop = false;
+void recherche_locale(Bierwirth& b0) {
+	bool stop = false;
 	Bierwirth b_new(b0);
 	do
 	{
-		b0.amelioration(b_new);
-		if (changer) {
-			b0 = b_new;
-		}
-		else {
-			stop = true;
-		}
+		stop=!b0.amelioration(b_new);
 	} while (!stop);
 }
 
@@ -32,6 +26,10 @@ int main(int, char **)
 	//b.display();
 	b.evaluer();
 	b.afficher_sequences();
+	b.afficher_chemin_critique();
+
+	recherche_locale(b);
+
 	b.afficher_chemin_critique();
 
 	return 0;
