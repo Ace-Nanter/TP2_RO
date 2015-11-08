@@ -43,6 +43,11 @@ Bierwirth::Bierwirth(const Bierwirth& b):
 	makespan_(b.makespan_),
 	last_cp_(b.last_cp_){ }
 
+const int Bierwirth::get_makespan_()
+{
+	return makespan_;
+}
+
 void Bierwirth::display() {
 	
 	for (unsigned i = 0; i < bierwirth_vector_.size(); i++) {
@@ -253,5 +258,23 @@ void Bierwirth::recherche_locale() {
 		}
 	} while (stop);									//Tant qu'on a des modifications, on continu
 
-	std::cout << "RL terminee en " << cpt_modification_Bierwirth << " tours, " << cpt_amelioration << " ameliorations ont ete apportees" << std::endl;
+	//std::cout << "RL terminee en " << cpt_modification_Bierwirth << " tours, " << cpt_amelioration << " ameliorations ont ete apportees" << std::endl;
+}
+
+void Bierwirth::shuffle()
+{
+	std::random_shuffle(bierwirth_vector_.begin(), bierwirth_vector_.end());
+}
+
+Bierwirth & Bierwirth::operator=(const Bierwirth & b)
+{
+	if (&b != this) {
+		d_=b.d_;
+		bierwirth_vector_=b.bierwirth_vector_;
+		tabItem_=b.tabItem_;
+		tabOpe_=b.tabOpe_;
+		makespan_=b.makespan_;
+		last_cp_=b.last_cp_;
+	}
+	return *this;
 }

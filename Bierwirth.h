@@ -36,7 +36,7 @@ class Bierwirth {
 private:
 	Data& d_;
 	std::vector<Job *> bierwirth_vector_;			// Vect de bierwith
-	std::vector<liste_items> tabItem_;					// Ordre des machines pour une pièce
+	std::vector<liste_items> tabItem_;				// Ordre des machines pour une pièce
 	std::vector<liste_machines> tabOpe_;			// Ordre des pièces par machine
 
 	unsigned	makespan_;							//Makespan et last operation local au vecteur courant de Bierwirth
@@ -46,12 +46,20 @@ public:
 	Bierwirth(Data&);
 	Bierwirth::Bierwirth(Data &d, std::vector<unsigned> v);
 	Bierwirth(const Bierwirth& b);
+	
+	const int get_makespan_();
+
 	void evaluer(std::vector<Job*> b_new);
 	void evaluer();
 	void display();
 	void afficher_sequences();
 	void afficher_chemin_critique();
 	void recherche_locale();
+	void shuffle();
+
+	Bierwirth &Bierwirth::operator=(const Bierwirth&);
 
 	class ExceptionIncorrectSize : public std::exception { };
+	
+	friend class Population;
 };

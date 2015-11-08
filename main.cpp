@@ -1,6 +1,7 @@
 #include <iostream>
 #include "data.h"
 #include "Bierwirth.h"
+#include "Population.h"
 
 int main(int, char **)
 {
@@ -28,12 +29,8 @@ int main(int, char **)
 	b.recherche_locale();
 
 	b.afficher_chemin_critique();
-
-	Bierwirth b2(d2);
-	b2.evaluer();
-	b2.afficher_chemin_critique();
-	b2.recherche_locale();
-	b2.afficher_chemin_critique();
+	
+	Population P(100, d);
 
 	return 0;
 }
