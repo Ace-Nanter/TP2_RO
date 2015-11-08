@@ -4,7 +4,8 @@
 Bierwirth::Bierwirth(Data& d) : d_(d),
 								bierwirth_vector_(d.nbJobs_ * d.nbMachines_),
 								tabItem_(d.nbJobs_, liste_items()),
-								tabOpe_(d.nbMachines_,  liste_machines())
+								tabOpe_(d.nbMachines_,  liste_machines()),
+								makespan_(d.makespan_)
 {
 	// Initialisation du vecteur de Bierwith
 	for (unsigned i = 0; i < d.jobs_.size(); i++) {
@@ -22,7 +23,8 @@ Bierwirth::Bierwirth(Data &d, std::vector<unsigned> v)
 	: d_(d),
 	bierwirth_vector_(d.nbJobs_ * d.nbMachines_),
 	tabItem_(d.nbJobs_, liste_items()),
-	tabOpe_(d.nbMachines_, liste_machines())
+	tabOpe_(d.nbMachines_, liste_machines()),
+	makespan_(d.makespan_)
 {
 	std::vector<unsigned> index(d.nbJobs_, 0);
 
@@ -49,14 +51,16 @@ const int Bierwirth::get_makespan_()
 }
 
 void Bierwirth::display() {
-	
+
+	std::cout << "Vecteur de Bierwirth utilisé :" << std::endl;
 	for (unsigned i = 0; i < bierwirth_vector_.size(); i++) {
+		if (i % 5 == 0)
+			std::cout << std::endl;
 		std::cout << "(" << bierwirth_vector_[i]->item_ << ",";
-		std::cout << bierwirth_vector_[i]->machine_ << ",";
-		std::cout << bierwirth_vector_[i]->duration_ << ") ; ";
+		std::cout << bierwirth_vector_[i]->machine_ << ")";
 	}
 
-	std::cout << std::endl;
+	std::cout << std::endl << std::endl;
 }
 
 void Bierwirth::evaluer(std::vector<Job*> b_new) {
@@ -66,7 +70,7 @@ void Bierwirth::evaluer(std::vector<Job*> b_new) {
 	unsigned time, wait_machine, wait_item;			// Variables de temps
 
 	bierwirth_vector_ = b_new;						// On met a jour le nouveau vecteur de Bierwirth passe en parametre
-	
+
 	// On nettoie les tableaux au cas où il existe deja avant
 	for (unsigned i=0;i < tabItem_.size();i++) {
 		tabItem_[i].machines.clear();
@@ -162,19 +166,19 @@ void Bierwirth::evaluer(std::vector<Job*> b_new) {
 
 	for (unsigned i = 0; i < tabItem_.size(); i++)
 	{
-		if (tabItem_[i].duree > d_.makespan_) {
+		if (tabItem_[i].duree > makespan_) {
 			makespan_ = tabItem_[i].duree;						// Mise à jour du makespan
 			last_cp_ = tabItem_[i].last_op;						// Mise à jour de la dernière opération
 		}
 	}
 }
 
-//Mehtode appele pour evaluer le chemin critique avec le Bierwirth ALEATOIRE
+// Méthode appelée pour evaluer le chemin critique avec le Bierwirth ALEATOIRE
 void Bierwirth::evaluer()
 {
 	evaluer(bierwirth_vector_);
 
-	//mise a jour du makespan_ dans data
+	// Mise a jour du makespan_ dans data
 	d_.makespan_ = makespan_;
 	d_.last_cp_ = last_cp_;
 }
@@ -194,7 +198,6 @@ void liste_machines::afficher_sequence_reverse() {
 	std::cout << std::endl;
 }
 
-// TODO : refaire le chemin critique
 void Bierwirth::afficher_chemin_critique() {
 	std::stack<Job *> p;				// Pile pour afficher le chemin critique dans le bon ordre
 	Job * tmp = d_.last_cp_;
@@ -208,13 +211,14 @@ void Bierwirth::afficher_chemin_critique() {
 	}
 	std::cout << "Chemin critique : " << std::endl;
 	while ( !p.empty() ) {
-		std::cout << "Job : " << p.top()->item_;
-		std::cout << "\tMachine : " << p.top()->machine_;
+		std::cout << "Job : " << std::setw(4) << p.top()->item_;
+		std::cout << "\tMachine : " << std::setw(4) << p.top()->machine_;
 		std::cout << std::endl;
 		p.pop();
 	}
-	std::cout << std::endl << std::endl;
+	std::cout << std::endl;
 	std::cout << "Makespan : " << makespan_ << std::endl;
+	std::cout << std::endl;
 }
 
 void Bierwirth::afficher_sequences() {
@@ -222,6 +226,7 @@ void Bierwirth::afficher_sequences() {
 		std::cout << "Sequence de la machine num. " << i << std::endl;
 		tabOpe_[i].afficher_sequence();
 	}
+	std::cout << std::endl;
 }
 
 void Bierwirth::recherche_locale() {
