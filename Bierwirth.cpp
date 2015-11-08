@@ -4,7 +4,8 @@
 Bierwirth::Bierwirth(Data& d) : d_(d),
 								bierwirth_vector_(d.nbJobs_ * d.nbMachines_),
 								tabItem_(d.nbJobs_, liste_items()),
-								tabOpe_(d.nbMachines_,  liste_machines())
+								tabOpe_(d.nbMachines_,  liste_machines()),
+								makespan_(d.makespan_)
 {
 	// Initialisation du vecteur de Bierwith
 	for (unsigned i = 0; i < d.jobs_.size(); i++) {
@@ -22,7 +23,8 @@ Bierwirth::Bierwirth(Data &d, std::vector<unsigned> v)
 	: d_(d),
 	bierwirth_vector_(d.nbJobs_ * d.nbMachines_),
 	tabItem_(d.nbJobs_, liste_items()),
-	tabOpe_(d.nbMachines_, liste_machines())
+	tabOpe_(d.nbMachines_, liste_machines()),
+	makespan_(d.makespan_)
 {
 	std::vector<unsigned> index(d.nbJobs_, 0);
 
@@ -63,7 +65,7 @@ void Bierwirth::evaluer(std::vector<Job*> b_new) {
 	unsigned time, wait_machine, wait_item;			// Variables de temps
 
 	bierwirth_vector_ = b_new;						// On met a jour le nouveau vecteur de Bierwirth passe en parametre
-	
+
 	// On nettoie les tableaux au cas où il existe deja avant
 	for (unsigned i=0;i < tabItem_.size();i++) {
 		tabItem_[i].machines.clear();
@@ -159,19 +161,19 @@ void Bierwirth::evaluer(std::vector<Job*> b_new) {
 
 	for (unsigned i = 0; i < tabItem_.size(); i++)
 	{
-		if (tabItem_[i].duree > d_.makespan_) {
+		if (tabItem_[i].duree > makespan_) {
 			makespan_ = tabItem_[i].duree;						// Mise à jour du makespan
 			last_cp_ = tabItem_[i].last_op;						// Mise à jour de la dernière opération
 		}
 	}
 }
 
-//Mehtode appele pour evaluer le chemin critique avec le Bierwirth ALEATOIRE
+// Méthode appelée pour evaluer le chemin critique avec le Bierwirth ALEATOIRE
 void Bierwirth::evaluer()
 {
 	evaluer(bierwirth_vector_);
 
-	//mise a jour du makespan_ dans data
+	// Mise a jour du makespan_ dans data
 	d_.makespan_ = makespan_;
 	d_.last_cp_ = last_cp_;
 }
