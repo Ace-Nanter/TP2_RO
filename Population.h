@@ -14,6 +14,7 @@ public:
 	~Population();
 
 	void algo_genetique();
+	void fusion(const std::vector< Bierwirth > &);
 };
 
 bool sorting_function(Bierwirth i, Bierwirth j);

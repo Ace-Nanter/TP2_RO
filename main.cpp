@@ -31,6 +31,7 @@ int main(int, char **)
 	b.afficher_chemin_critique();
 	
 	Population P(100, d);
+	P.algo_genetique();
 
 	return 0;
 }

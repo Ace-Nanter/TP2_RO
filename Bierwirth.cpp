@@ -1,5 +1,6 @@
 #include "Bierwirth.h"
 #include <iostream>
+#include <exception>
 
 Bierwirth::Bierwirth(Data& d) : d_(d),
 								bierwirth_vector_(d.nbJobs_ * d.nbMachines_),
@@ -259,6 +260,7 @@ void Bierwirth::recherche_locale() {
 				}
 				cpt_modification_Bierwirth++;
 			}
+			if (cur == cur->father_) throw std::logic_error("Boucle infinie dans la Recherche Locale (chemin critique erroné)");
 			cur = cur->father_;						//increment
 		}
 	} while (stop);									//Tant qu'on a des modifications, on continu
