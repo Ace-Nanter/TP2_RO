@@ -14,7 +14,7 @@ struct Job
   unsigned duration_;		// Durée du job
 
   Job * next_;				// TODO: set an in-class initialization
-  Job * prev_;				// TODO: set an in-class initialization
+  Job * prev_;				// TODO: set an in-class initialization		// Piece precedente sur la machine ou la piece se trouve actuellement
   Job * father_;			// TODO: set an in-class initialization		// 
   unsigned starting_;		// TODO: set an in-class initialization		// Temps où le job démarre
   unsigned location_;		// TODO: set an in-class initialization		// Position ou il se trouve sur Bierwirth

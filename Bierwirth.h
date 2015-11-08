@@ -20,6 +20,8 @@ struct liste_machines {
 
 	liste_machines() :last_op(nullptr), duree(0) { }
 	void afficher_sequence();
+	void afficher_sequence_reverse();
+
 };
 
 struct liste_items{
@@ -27,7 +29,7 @@ struct liste_items{
 	Job* last_op;					// Dernière opération sur la pièce
 	unsigned duree;					// Date à laquelle la pièce est appelée
 
-	liste_items::liste_items() :last_op(nullptr), duree(0) { }
+	liste_items() :last_op(nullptr), duree(0) { }
 };
 
 class Bierwirth {
@@ -49,7 +51,7 @@ public:
 	void display();
 	void afficher_sequences();
 	void afficher_chemin_critique();
-	bool amelioration(Bierwirth& b2);
+	void recherche_locale();
 
 	class ExceptionIncorrectSize : public std::exception { };
 };

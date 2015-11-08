@@ -2,22 +2,11 @@
 #include "data.h"
 #include "Bierwirth.h"
 
-/*
-void recherche_locale(Bierwirth& b0);
-
-void recherche_locale(Bierwirth& b0) {
-	bool stop = false;
-	Bierwirth b_new(b0);
-	do
-	{
-		stop=!b0.amelioration(b_new);
-	} while (!stop);
-}*/
-
 int main(int, char **)
 {
 	
 	Data d("INSTANCES/la01.dat");
+	Data d2("INSTANCES/la08.dat");
 
 /*------------------------------------------------------*/
 /* Pour test selon "autre façon"                        */
@@ -36,7 +25,15 @@ int main(int, char **)
 	b.afficher_sequences();
 	b.afficher_chemin_critique();
 
-	//recherche_locale(b);
+	b.recherche_locale();
+
+	b.afficher_chemin_critique();
+
+	Bierwirth b2(d2);
+	b2.evaluer();
+	b2.afficher_chemin_critique();
+	b2.recherche_locale();
+	b2.afficher_chemin_critique();
 
 	return 0;
 }
