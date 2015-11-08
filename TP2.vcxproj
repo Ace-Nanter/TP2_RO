@@ -159,6 +159,7 @@
   <ItemGroup>
     <None Include="Debug\la01.dat" />
     <None Include="INSTANCES\la01.dat" />
+    <None Include="Rapport.docx" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

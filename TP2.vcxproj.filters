@@ -42,5 +42,6 @@
   <ItemGroup>
     <None Include="Debug\la01.dat" />
     <None Include="INSTANCES\la01.dat" />
+    <None Include="Rapport.docx" />
   </ItemGroup>
 </Project>

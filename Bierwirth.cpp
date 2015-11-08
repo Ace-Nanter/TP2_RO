@@ -44,14 +44,16 @@ Bierwirth::Bierwirth(const Bierwirth& b):
 	last_cp_(b.last_cp_){ }
 
 void Bierwirth::display() {
-	
+
+	std::cout << "Vecteur de Bierwirth utilisé :" << std::endl;
 	for (unsigned i = 0; i < bierwirth_vector_.size(); i++) {
+		if (i % 5 == 0)
+			std::cout << std::endl;
 		std::cout << "(" << bierwirth_vector_[i]->item_ << ",";
-		std::cout << bierwirth_vector_[i]->machine_ << ",";
-		std::cout << bierwirth_vector_[i]->duration_ << ") ; ";
+		std::cout << bierwirth_vector_[i]->machine_ << ")";
 	}
 
-	std::cout << std::endl;
+	std::cout << std::endl << std::endl;
 }
 
 void Bierwirth::evaluer(std::vector<Job*> b_new) {
@@ -189,7 +191,6 @@ void liste_machines::afficher_sequence_reverse() {
 	std::cout << std::endl;
 }
 
-// TODO : refaire le chemin critique
 void Bierwirth::afficher_chemin_critique() {
 	std::stack<Job *> p;				// Pile pour afficher le chemin critique dans le bon ordre
 	Job * tmp = d_.last_cp_;
@@ -203,13 +204,14 @@ void Bierwirth::afficher_chemin_critique() {
 	}
 	std::cout << "Chemin critique : " << std::endl;
 	while ( !p.empty() ) {
-		std::cout << "Job : " << p.top()->item_;
-		std::cout << "\tMachine : " << p.top()->machine_;
+		std::cout << "Job : " << std::setw(4) << p.top()->item_;
+		std::cout << "\tMachine : " << std::setw(4) << p.top()->machine_;
 		std::cout << std::endl;
 		p.pop();
 	}
-	std::cout << std::endl << std::endl;
+	std::cout << std::endl;
 	std::cout << "Makespan : " << makespan_ << std::endl;
+	std::cout << std::endl;
 }
 
 void Bierwirth::afficher_sequences() {
@@ -217,6 +219,7 @@ void Bierwirth::afficher_sequences() {
 		std::cout << "Sequence de la machine num. " << i << std::endl;
 		tabOpe_[i].afficher_sequence();
 	}
+	std::cout << std::endl;
 }
 
 void Bierwirth::recherche_locale() {
