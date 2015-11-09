@@ -29,11 +29,11 @@ struct Data
 
   std::mt19937 rng_engine_;
 
+  Data(const Data & d);
   Data (const std::string &);
   void clear ();										// ?
 
   void display_all (std::ostream &) const;				// Affichage des données
-  Data::Data(const Data & d);
 };
 
 std::ostream & operator<< (std::ostream &, const Data &);

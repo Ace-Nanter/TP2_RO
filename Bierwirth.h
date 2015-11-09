@@ -50,11 +50,12 @@ public:
 	
 	const int get_makespan_();
 
-	void evaluer(std::vector<Job*> b_new);
+	void evaluer(std::vector<Job*>& b_new);
 	void evaluer();
 	void display();
 	void afficher_sequences();
 	void afficher_chemin_critique();
+	void afficher_bierwirth();
 	void recherche_locale();
 	void shuffle();
 

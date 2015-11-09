@@ -7,85 +7,105 @@
 
 Population::Population(unsigned taille,Data& d):taille_(taille),d_(d)
 {
-	Bierwirth b_tmp(d);
+	Bierwirth b_tmp(d);			//Bierwirth de base
+	//On creer une population a partir de d
 	for (unsigned i = 0;i < taille_;i++) {
-		b_tmp.shuffle();
-		b_tmp.evaluer();
-		P_.push_back(Bierwirth(b_tmp));
-	//	std::cout << "individu n" << i << " : makespan:" << P_[i].get_makespan_() << "\t;";
-		P_[i].recherche_locale();
-	//	std::cout << "RL:" << P_[i].get_makespan_() << std::endl;
+		b_tmp.shuffle();				//Creation d'un individu
+		b_tmp.evaluer();				//Mise a jour des donnees
+		b_tmp.recherche_locale();		//RL
+		P_.push_back(Bierwirth(b_tmp));	//ajout de l'individu
 	}
-	std::sort (P_.begin(), P_.end(), sorting_function);
-	std::cout << "Population initiale :" << std::endl;
-	for (unsigned i = 0;i < taille_;i++) {
-		std::cout << "n" << i << " " << P_[i].get_makespan_() << std::endl;
-	}
+	std::sort (P_.begin(), P_.end(), sorting_function_bierwirth);	//On trie la population obtenue en fonction du makespan
 }
 
 
-Population::Population::~Population()
-{
+Population::Population::~Population(){}
 
-}
-
-//On divise les individu en 3 gene
-//On va proceder par une selection par rang (speciale)
-//2 des genes retenu se trouve dans les 20% meilleurs resultats
-//Le 3 eme est pris uniformement sur les parents
+//On divise les individu en 2 genes (coupe a la moitier)
+//On va proceder par une selection par rang 
+//le premier des genes retenus se trouve dans les 20% meilleurs resultats
+//Le 2 eme est pris uniformement sur les parents
 //seed du mersen twistter "bierwirth"
 void Population::algo_genetique() {
+	//Initialisation du mersenne twistter
 	std::string seed_str("bierwirth");
 	std::seed_seq seed (seed_str.begin(),seed_str.end());
-	unsigned delimiteur1 = (unsigned)((float)(P_[0].bierwirth_vector_.size()) / 3);
-	unsigned delimiteur2 = 2 * delimiteur1;
-	std::vector<unsigned> gene(3);						//numeros du bierwirth des 3 genes a melanger dans l'enfant
-	unsigned elite = (unsigned)((float)taille_*0.2);	//delimiteur des meilleurs individus, ici 20%
 
-//	unsigned modulo = ((taille_ - 1)*taille_) / 2;//valeur du modulo sur le mersenne twistter pour faire la selection par rang
-	std::vector< Bierwirth > P_enf;						// Population d'enfant
-	Bierwirth b_temp(d_);								//Bierwirth temporaire, pour creer les enfants
-	std::mt19937 mt (seed);
+	unsigned delimiteur = (unsigned)(P_[0].bierwirth_vector_.size() / 2);	//delimiteur de la partie Pere/Mere des parents (ici a la moiter)
+	std::vector<unsigned> gene(2);											//numeros des individus à melanger dans l'enfant
+	unsigned elite = (unsigned)((float)taille_*0.2);						//delimiteur des meilleurs individus, ici 20%
+
+	std::vector< Bierwirth > P_enf;				// Population d'enfant
+	Bierwirth b_temp(d_);						// Bierwirth temporaire, pour creer les enfants
+	std::mt19937 mt (seed);						//Mersenne twistter
 
 	//Creation d'une population d'enfant
 	for (unsigned i = 0;i < taille_;i++) {
 		//Choix parmis les parents des genes a melanger :
 		gene[0] = mt() % elite;
-		gene[1] = mt() % elite;
-		gene[2] = mt() % taille_;
-		/*for (unsigned j = 0;j < taille_;j++) {
-			if (x < tmp) {
-				gene1 = j;
-			}
-			tmp += j;
-		}*/
-
-		/************************************************************************/
-		/** Cette mutation engendre des problemes parce qu'on se retrouve avec **/
-		/** des vecteurs de Bierwirth à plusieurs occurences d'un même Job,    **/
-		/** ce qui entraine des boucles infinies                               **/
-		/** Il faut trouver un autre systeme de mutation                       **/
-		/************************************************************************/
+		gene[1] = mt() % taille_;
 
 		//Creation de l'enfant par mutation
-		std::copy(P_[gene[0]].bierwirth_vector_.begin(), P_[gene[0]].bierwirth_vector_.begin() + delimiteur1,b_temp.bierwirth_vector_.begin());
-		std::copy(P_[gene[1]].bierwirth_vector_.begin() + delimiteur1, P_[gene[1]].bierwirth_vector_.begin() + delimiteur2, b_temp.bierwirth_vector_.begin()+delimiteur1);
-		std::copy(P_[gene[2]].bierwirth_vector_.begin() + delimiteur2, P_[gene[2]].bierwirth_vector_.end(), b_temp.bierwirth_vector_.begin()+delimiteur2);
-		b_temp.evaluer();					//Evaluation du chemin critique
+		b_temp.bierwirth_vector_.clear();
+		b_temp.bierwirth_vector_.insert(b_temp.bierwirth_vector_.begin(),
+			P_[gene[0]].bierwirth_vector_.begin(), 
+			P_[gene[0]].bierwirth_vector_.begin() + delimiteur);			//On copie la premiere moitier du premier gene
+		b_union(b_temp.bierwirth_vector_, P_[gene[1]].bierwirth_vector_);	//On fait une union avec le deuxieme gene
+		b_temp.evaluer();													//Evaluation du chemin critique
+
+		//affichage pour comparaison
+		/*for (unsigned i = 0;i < b_temp.bierwirth_vector_.size();i++) {
+			if (i == delimiteur) { std::cout << "-------------------------------" << std::endl; }
+			std::cout << P_[gene[0]].bierwirth_vector_[i]->item_ << ";" << P_[gene[0]].bierwirth_vector_[i]->machine_ << "\t";
+			std::cout << P_[gene[1]].bierwirth_vector_[i]->item_ << ";" << P_[gene[1]].bierwirth_vector_[i]->machine_ << "\t";
+			std::cout << b_temp.bierwirth_vector_[i]->item_ << ";" << b_temp.bierwirth_vector_[i]->machine_ << std::endl;
+		}*/
+
 		b_temp.recherche_locale();			//Recherche Locale
-		P_enf.push_back(Bierwirth(b_temp));
-		std::cout << "makespan enfant n" << i << ": " << P_enf[i].makespan_ << " " << b_temp.makespan_ << std::endl;
+		P_enf.push_back(Bierwirth(b_temp));	//On ajoute le nouvel individu a la population enfant
 	}
-	std::sort(P_enf.begin(), P_enf.end(), sorting_function);
-	fusion(P_enf);//On fait une union de P_enf et on obtient la nouvelle population
+	std::sort(P_enf.begin(), P_enf.end(), sorting_function_bierwirth);	//trie de la population enfant
+	fusion(P_enf);														//On fait une union de P_enf et on obtient la nouvelle population
 }
 
 void Population::fusion(const std::vector<Bierwirth>& P_enf)
 {
-	std::set_union(P_.begin(), P_.end(), P_enf.begin(), P_enf.end(), P_.begin(),sorting_function);//J'espere que set_union ne depasse pas P_ jusqua la seg fault mais pas sur
+	P_.insert(P_.end(),P_enf.begin(),P_enf.end());					//On rajoute les enfants
+	std::sort(P_.begin(), P_.end(), sorting_function_bierwirth);	//On trie
+	std::unique(P_.begin(), P_.end(),unique_function_bierwirth);	//On supprime les occurences multiples (peut engendrer des pertes 
+																	//sur les resultats obtenus puisqu'on reduit ainsi le nombre d'individus 
+																	//avec de bons makespan )
+	P_.resize(taille_, P_enf[0]);									//On recoupe pour avoir une population de la bonne taille
 }
 
-bool sorting_function(Bierwirth i, Bierwirth j) { return (i.get_makespan_()<j.get_makespan_()); }
+void Population::afficher_makespan(unsigned n)
+{
+	for (unsigned i = 0;i < n && i < taille_;i++) {
+		std::cout << "n" << i << " " << P_[i].get_makespan_() << std::endl;
+	}
+}
 
+//affiche les makespans de tous les individus
+void Population::afficher_makespan()
+{
+	afficher_makespan(taille_);
+}
+
+
+bool sorting_function_bierwirth(Bierwirth i, Bierwirth j) { return (i.get_makespan_()<j.get_makespan_()); }
+bool unique_function_bierwirth(Bierwirth i, Bierwirth j) { return (i.get_makespan_()==j.get_makespan_()); }
+
+
+void b_union(std::vector< Job* > & enfant, std::vector< Job* > & mere) {
+	unsigned i,j,taille=(unsigned)enfant.size();					//on sauvegarde la taille de l'enfant initiale, car on ne parcourera pas plus
+	bool stop;
+	for (i = 0;i<mere.size();i++) {									//Parcours du vecteur mere
+		stop = false;
+		for (j = 0;((j < taille) && (mere[i] != enfant[j]));j++);	//Parcour du vecteur enfant
+		if (j==taille) enfant.push_back(mere[i]);					//Si on a parcourue tout le vecteur mere alors cela veut dire
+																	//que la piece n'existe pas donc on la rajoute
+	}
+
+}
 
 

@@ -31,7 +31,18 @@ int main(int, char **)
 	b.afficher_chemin_critique();
 	
 	Population P(100, d);
+	std::cout << "Population initiale, 20 premiers membres :" << std::endl;
+	P.afficher_makespan(20);
 	P.algo_genetique();
+	std::cout << "Nouvelle population 1, 20 premiers membres :" << std::endl;
+	P.afficher_makespan(20);
+
+	P.algo_genetique();std::cout << ".";
+	P.algo_genetique();std::cout << ".";
+	P.algo_genetique();std::cout << ".";
+	P.algo_genetique();std::cout << ".";
+	std::cout << "Nouvelle population 5, 20 premiers membres :" << std::endl;
+	P.afficher_makespan(20);
 
 	return 0;
 }

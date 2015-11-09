@@ -64,7 +64,7 @@ void Bierwirth::display() {
 	std::cout << std::endl << std::endl;
 }
 
-void Bierwirth::evaluer(std::vector<Job*> b_new) {
+void Bierwirth::evaluer(std::vector<Job*>& b_new) {
 	Job * cur;										// Pointeur actuel et précédent
 	liste_machines * machine_tmp;					// Variable machine
 	liste_items * item_tmp;							// Variable pièce
@@ -182,6 +182,14 @@ void Bierwirth::evaluer()
 	// Mise a jour du makespan_ dans data
 	d_.makespan_ = makespan_;
 	d_.last_cp_ = last_cp_;
+}
+
+void Bierwirth::afficher_bierwirth() {
+	std::cout << "size: " << bierwirth_vector_.size() << std::endl;
+	for (unsigned i = 0;i < bierwirth_vector_.size();i++) {
+		if (i == (bierwirth_vector_.size()/2)) { std::cout << "-------------------------------" << std::endl; }
+		std::cout << bierwirth_vector_[i]->item_ << " " << bierwirth_vector_[i]->machine_ << std::endl;
+	}
 }
 
 void liste_machines::afficher_sequence() {
