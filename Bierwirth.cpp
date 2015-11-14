@@ -184,14 +184,6 @@ void Bierwirth::evaluer()
 	d_.last_cp_ = last_cp_;
 }
 
-void Bierwirth::afficher_bierwirth() {
-	std::cout << "size: " << bierwirth_vector_.size() << std::endl;
-	for (unsigned i = 0;i < bierwirth_vector_.size();i++) {
-		if (i == (bierwirth_vector_.size()/2)) { std::cout << "-------------------------------" << std::endl; }
-		std::cout << bierwirth_vector_[i]->item_ << " " << bierwirth_vector_[i]->machine_ << std::endl;
-	}
-}
-
 void liste_machines::afficher_sequence() {
 	for (unsigned i = 0; i < jobs.size(); i++)
 		std::cout << jobs[i]->item_ << " ";

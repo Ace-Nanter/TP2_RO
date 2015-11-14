@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Bierwirth">
+    <Position X="0.5" Y="0.5" Width="2" />
+    <NestedTypes>
+      <Class Name="Bierwirth::ExceptionIncorrectSize" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Bierwirth.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>EAQQAAAAAAAAAAAICAAAhCBAACEBAAAAAAAgAAQCAAA=</HashCode>
+      <FileName>Bierwirth.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Population">
+    <Position X="10.25" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAEAAAAIAAIAAIAAIAAACAgAAAAgAAAAAAAAAA=</HashCode>
+      <FileName>Population.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="Job">
+    <Position X="4.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gEAQBAIAACAAAAAAAAAgAAACAAACAAAAgAIAAAAAABA=</HashCode>
+      <FileName>job.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="Data">
+    <Position X="8.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEAAAAAAACAQABAAAAEAwAAAAAgAABAAAAAAAIACIAA=</HashCode>
+      <FileName>data.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="liste_items">
+    <Position X="10.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAAAAAAAgAACAAAAAAAAAAAAAAAAAAAAAAAAAEAA=</HashCode>
+      <FileName>Bierwirth.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="liste_machines">
+    <Position X="12" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAAAAAAAAAACAAACAAABAAAABAAAAAAAAAAAAEAA=</HashCode>
+      <FileName>Bierwirth.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

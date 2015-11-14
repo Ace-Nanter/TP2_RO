@@ -36,7 +36,7 @@ struct liste_items{
 class Bierwirth {
 private:
 	Data& d_;
-	std::vector<Job *> bierwirth_vector_;			// Vect de bierwith
+	std::vector<Job *> bierwirth_vector_;			// Vecteur de bierwith
 	std::vector<liste_items> tabItem_;				// Ordre des machines pour une pièce
 	std::vector<liste_machines> tabOpe_;			// Ordre des pièces par machine
 
@@ -55,7 +55,6 @@ public:
 	void display();
 	void afficher_sequences();
 	void afficher_chemin_critique();
-	void afficher_bierwirth();
 	void recherche_locale();
 	void shuffle();
 
