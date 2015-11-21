@@ -37,7 +37,7 @@ void Population::algo_genetique() {
 
 	std::vector< Bierwirth > P_enf;				// Population d'enfant
 	Bierwirth b_temp(d_);						// Bierwirth temporaire, pour creer les enfants
-	std::mt19937 mt (seed);						//Mersenne twistter
+	std::mt19937 mt (seed);						// Mersenne twistter
 
 	//Creation d'une population d'enfant
 	for (unsigned i = 0;i < taille_;i++) {
@@ -89,6 +89,18 @@ void Population::afficher_makespan(unsigned n)
 void Population::afficher_makespan()
 {
 	afficher_makespan(taille_);
+}
+
+void Population::afficher_bierwirth(unsigned n)
+{
+	for (unsigned i=0; i < n; i++) {
+		P_[i].afficher_bierwirth();
+	}
+}
+
+void Population::afficher_bierwirth()
+{
+	afficher_bierwirth(taille_);
 }
 
 

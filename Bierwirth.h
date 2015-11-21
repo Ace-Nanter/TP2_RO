@@ -54,6 +54,7 @@ public:
 	void display();
 	void afficher_sequences();
 	void afficher_chemin_critique();
+	void afficher_bierwirth();
 	void recherche_locale();
 	void shuffle();
 

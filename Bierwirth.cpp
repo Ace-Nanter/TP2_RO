@@ -222,6 +222,14 @@ void Bierwirth::afficher_chemin_critique() {
 	std::cout << std::endl;
 }
 
+void Bierwirth::afficher_bierwirth()
+{
+	for (std::vector<Job*>::iterator it = bierwirth_vector_.begin(); it != bierwirth_vector_.end();++it) {
+		std::cout << "(" << (*it)->item_ << "," << (*it)->machine_ << ")";
+	}
+	std::cout << "\n";
+}
+
 void Bierwirth::afficher_sequences() {
 	for (unsigned i = 0; i < tabOpe_.size(); i++) {
 		std::cout << "Sequence de la machine num. " << i << std::endl;
@@ -231,19 +239,23 @@ void Bierwirth::afficher_sequences() {
 }
 
 void Bierwirth::recherche_locale() {
-	Bierwirth b_new(*this);
+	Bierwirth b_new(*this);												//On travail avec une copie de notre chemin critique actuel
 	Job* cur;
-	bool stop;													//si stop = false on a parcourue tout le chemin critique sans trouver d'arc disjonctif
-	unsigned cpt_amelioration = 0, cpt_modification_Bierwirth = 0;	//cpt d'amelioration trouver, et cpt d'iteration total
+	bool stop;															//si stop = false on a parcourue tout le chemin 
+																		//critique sans trouver d'arc disjonctif
+	unsigned cpt_amelioration = 0, cpt_modification_Bierwirth = 0;		//cpt d'amelioration trouver, et cpt d'iteration total
 	do {
 		cur = b_new.last_cp_;
 		stop = false;
-		while (cur != NULL && !stop) {
-			if (cur->prev_!=nullptr && cur->prev_ == cur->father_) {						//Si le lien entre la piece courante et son father est un arc disjonctif
-																							//on echange les 2 jobs dans bierwirth
-				std::swap(b_new.bierwirth_vector_[cur->location_],b_new.bierwirth_vector_[cur->father_->location_]);	
-				b_new.evaluer(b_new.bierwirth_vector_);										//On réévalue bierwirth
-				if (b_new.makespan_ < makespan_) {											//Si le makespan est meilleur -> on actualise nos element (le chemin critique)
+		while (cur != NULL && !stop) {									//On continu tant qu'on a pas trouve de solution ou 
+																		//que notre chemin critique n'a pas ete entierement parcouru
+			if (cur->prev_!=nullptr && cur->prev_ == cur->father_) {	//Si le lien entre la piece courante et son father est un arc disjonctif
+																		//on echange les 2 jobs dans bierwirth
+				std::swap(b_new.bierwirth_vector_[cur->location_],
+					b_new.bierwirth_vector_[cur->father_->location_]);	
+				b_new.evaluer(b_new.bierwirth_vector_);					//On réévalue bierwirth
+				if (b_new.makespan_ < makespan_) {						//Si le makespan est meilleur -> on actualise nos resultats 
+																		//(le chemin critique et le makespan)
 					//Copie des nouvelles donnees
 					bierwirth_vector_ = b_new.bierwirth_vector_;
 					tabItem_ = b_new.tabItem_;
@@ -254,8 +266,8 @@ void Bierwirth::recherche_locale() {
 					//mise a jour du makespan_ dans data
 					d_.makespan_ = makespan_;
 					d_.last_cp_ = last_cp_;
-					stop = true;					//si stop = true, on a trouve une solution
-					
+					stop = true;										//si stop = true, on a trouve une solution
+
 					cpt_amelioration++;
 				}
 				cpt_modification_Bierwirth++;

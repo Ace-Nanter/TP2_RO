@@ -46,5 +46,8 @@ int main(int, char **)
 	std::cout << "Nouvelle population 5, 20 premiers membres :" << std::endl;
 	P.afficher_makespan(20);
 
+	std::cout << "Notre meilleur Bierwirth !" << std::endl;
+	P.afficher_bierwirth(1);
+
 	return 0;
 }
