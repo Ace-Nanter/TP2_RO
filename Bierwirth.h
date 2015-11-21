@@ -11,16 +11,16 @@
 
 
 /*--------------------------------*/
-/* Liste les opérations d'une     */
-/* machine                        */
+/* Contient les opérations par    */
+/* machines                       */
 /*--------------------------------*/
 struct liste_machines {
-	std::vector<Job *> jobs;	// Pièces qui passent par la machine
-	Job* last_op;				// Dernière opération sur la machine
-	unsigned duree;				// Date de l'opération
+	std::vector<Job *>	jobs;			// Pièces qui passent par la machine
+	Job*				last_op;		// Dernière opération sur la machine
+	unsigned			duree;			// Date de l'opération
 
 	liste_machines() :last_op(nullptr), duree(0) { }
-	void afficher_sequence();
+	void afficher_sequence();	// Affiche les opérations de chaque machine
 	void afficher_sequence_reverse();
 
 };
@@ -49,7 +49,6 @@ public:
 	Bierwirth(const Bierwirth& b);
 	
 	const int get_makespan_();
-
 	void evaluer(std::vector<Job*>& b_new);
 	void evaluer();
 	void display();
