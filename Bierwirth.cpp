@@ -8,7 +8,7 @@ Bierwirth::Bierwirth(Data& d) : d_(d),
 								tabOpe_(d.nbMachines_,  liste_machines()),
 								makespan_(d.makespan_)
 {
-	// Initialisation du vecteur de Bierwith
+	// Initialisation du vecteur de Bierwith : on met la matrice de data à plat
 	for (unsigned i = 0; i < d.jobs_.size(); i++) {
 		for (unsigned j = 0; j < d.jobs_[i].size(); j++) {
 			bierwirth_vector_[j * d.jobs_.size() + i] = &(d_.jobs_.at(i).at(j));
@@ -16,9 +16,10 @@ Bierwirth::Bierwirth(Data& d) : d_(d),
 		}
 	}
 
-	// On mélange
+	// On mélange le vecteur aléatoirement
 	std::random_shuffle(bierwirth_vector_.begin(), bierwirth_vector_.end());
 }
+
 
 Bierwirth::Bierwirth(Data &d, std::vector<unsigned> v)
 	: d_(d),

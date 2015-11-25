@@ -50,5 +50,6 @@
     <None Include="INSTANCES\la01.dat" />
     <None Include="Rapport.docx" />
     <None Include="Diagramme de classe.cd" />
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>

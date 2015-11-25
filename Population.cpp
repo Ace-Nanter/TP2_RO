@@ -117,7 +117,6 @@ void b_union(std::vector< Job* > & enfant, std::vector< Job* > & mere) {
 		if (j==taille) enfant.push_back(mere[i]);					//Si on a parcourue tout le vecteur mere alors cela veut dire
 																	//que la piece n'existe pas donc on la rajoute
 	}
-
 }
 
 

@@ -163,6 +163,7 @@
     <ClInclude Include="Population.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="ClassDiagram.cd" />
     <None Include="Diagramme de classe.cd" />
     <None Include="Debug\la01.dat" />
     <None Include="INSTANCES\la01.dat" />
