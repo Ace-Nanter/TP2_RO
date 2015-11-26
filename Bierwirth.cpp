@@ -2,6 +2,12 @@
 #include <iostream>
 #include <exception>
 
+
+void Bierwirth::shuffle()
+{
+	std::random_shuffle(bierwirth_vector_.begin(), bierwirth_vector_.end());
+}
+
 Bierwirth::Bierwirth(Data& d) : d_(d),
 								bierwirth_vector_(d.nbJobs_ * d.nbMachines_),
 								tabItem_(d.nbJobs_, liste_items()),
@@ -50,19 +56,6 @@ Bierwirth::Bierwirth(const Bierwirth& b):
 const int Bierwirth::get_makespan_()
 {
 	return makespan_;
-}
-
-void Bierwirth::display() {
-
-	std::cout << "Vecteur de Bierwirth utilisé :" << std::endl;
-	for (unsigned i = 0; i < bierwirth_vector_.size(); i++) {
-		if (i % 5 == 0)
-			std::cout << std::endl;
-		std::cout << "(" << bierwirth_vector_[i]->item_ << ",";
-		std::cout << bierwirth_vector_[i]->machine_ << ")";
-	}
-
-	std::cout << std::endl << std::endl;
 }
 
 void Bierwirth::evaluer(std::vector<Job*>& b_new) {
@@ -225,10 +218,15 @@ void Bierwirth::afficher_chemin_critique() {
 
 void Bierwirth::afficher_bierwirth()
 {
-	for (std::vector<Job*>::iterator it = bierwirth_vector_.begin(); it != bierwirth_vector_.end();++it) {
-		std::cout << "(" << (*it)->item_ << "," << (*it)->machine_ << ")";
+	std::cout << "Vecteur de Bierwirth :" << std::endl;
+	for (unsigned i = 0; i < bierwirth_vector_.size(); i++) {
+		if (i % 5 == 0)
+			std::cout << std::endl;
+		std::cout << "(" << bierwirth_vector_[i]->item_ << ",";
+		std::cout << bierwirth_vector_[i]->machine_ << ")";
 	}
-	std::cout << "\n";
+
+	std::cout << std::endl << std::endl;
 }
 
 void Bierwirth::afficher_sequences() {
@@ -281,10 +279,7 @@ void Bierwirth::recherche_locale() {
 	//std::cout << "RL terminee en " << cpt_modification_Bierwirth << " tours, " << cpt_amelioration << " ameliorations ont ete apportees" << std::endl;
 }
 
-void Bierwirth::shuffle()
-{
-	std::random_shuffle(bierwirth_vector_.begin(), bierwirth_vector_.end());
-}
+
 
 Bierwirth & Bierwirth::operator=(const Bierwirth & b)
 {

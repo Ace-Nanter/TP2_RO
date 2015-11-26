@@ -21,8 +21,6 @@ int main(int, char **)
 	//Bierwirth b(d);
 	//d.display_all(std::cout);
 
-	b.display();
-
 	b.afficher_bierwirth();
 	b.evaluer();
 	b.afficher_sequences();
