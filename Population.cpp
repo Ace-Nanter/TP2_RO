@@ -8,6 +8,7 @@
 Population::Population(unsigned taille,Data& d):taille_(taille),d_(d)
 {
 	Bierwirth b_tmp(d);			//Bierwirth de base
+
 	//On creer une population a partir de d
 	for (unsigned i = 0;i < taille_;i++) {
 		b_tmp.shuffle();				//Creation d'un individu
@@ -21,18 +22,23 @@ Population::Population(unsigned taille,Data& d):taille_(taille),d_(d)
 
 Population::Population::~Population(){}
 
+/*
+* ALGORITHME
+*
+* On divise les individu en 2 genes (coupe a la moitier)
+* On va proceder par une selection par rang
+* le premier des genes retenus se trouve dans les 20% meilleurs resultats
+* Le 2 eme est pris uniformement sur les parents
+* seed du mersen twistter "bierwirth"
+*/
 
 void Population::algo_genetique() {
 	std::ofstream f;
 	algo_genetique(f);
 }
 
-//On divise les individu en 2 genes (coupe a la moitier)
-//On va proceder par une selection par rang 
-//le premier des genes retenus se trouve dans les 20% meilleurs resultats
-//Le 2 eme est pris uniformement sur les parents
-//seed du mersen twistter "bierwirth"
 void Population::algo_genetique(std::ofstream& file) {
+	
 	//Initialisation du mersenne twistter
 	std::string seed_str("bierwirth");
 	std::seed_seq seed (seed_str.begin(),seed_str.end());
@@ -64,14 +70,6 @@ void Population::algo_genetique(std::ofstream& file) {
 			P_[gene[0]].bierwirth_vector_.begin() + delimiteur);			//On copie la premiere moitier du premier gene
 		b_union(b_temp.bierwirth_vector_, P_[gene[1]].bierwirth_vector_);	//On fait une union avec le deuxieme gene
 		b_temp.evaluer();													//Evaluation du chemin critique
-
-		//affichage pour comparaison
-		/*for (unsigned i = 0;i < b_temp.bierwirth_vector_.size();i++) {
-			if (i == delimiteur) { std::cout << "-------------------------------" << std::endl; }
-			std::cout << P_[gene[0]].bierwirth_vector_[i]->item_ << ";" << P_[gene[0]].bierwirth_vector_[i]->machine_ << "\t";
-			std::cout << P_[gene[1]].bierwirth_vector_[i]->item_ << ";" << P_[gene[1]].bierwirth_vector_[i]->machine_ << "\t";
-			std::cout << b_temp.bierwirth_vector_[i]->item_ << ";" << b_temp.bierwirth_vector_[i]->machine_ << std::endl;
-		}*/
 
 		b_temp.recherche_locale();			//Recherche Locale
 		P_enf.push_back(Bierwirth(b_temp));	//On ajoute le nouvel individu a la population enfant
@@ -120,6 +118,12 @@ void Population::afficher_bierwirth()
 	afficher_bierwirth(taille_);
 }
 
+int Population::get_makespan() {
+	return P_[0].get_makespan_();
+}
+
+
+//Fonctions
 
 bool sorting_function_bierwirth(Bierwirth i, Bierwirth j) { return (i.get_makespan_()<j.get_makespan_()); }
 bool unique_function_bierwirth(Bierwirth i, Bierwirth j) { return (i.get_makespan_()==j.get_makespan_()); }

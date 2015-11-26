@@ -11,9 +11,10 @@ int main(int, char **)
 	clock_t	chronometer=clock();				//Chronometre
 	std::ofstream file_time("time.csv");
 	std::ofstream file_makespan("makspan.csv");
+	std::ofstream file_popgen("popgen.csv");
 	int taille_pop = 100;
 
-	if (!file_time || !file_makespan) {
+	if (!file_time || !file_makespan || !file_popgen) {
 		std::cout << "fichiers non initialises" << std::endl;
 	}
 	
@@ -40,6 +41,7 @@ int main(int, char **)
 	data_tab.push_back(Data("INSTANCES/la19.dat"));
 	data_tab.push_back(Data("INSTANCES/la20.dat"));
 
+	// Calcul des RL et des 5eme generation de chaque donnee 
 	int cpt = 0;
 	for (std::vector<Data>::iterator it = data_tab.begin(); it != data_tab.end();it++) {
 		file_time << "Data " << cpt << ";";
@@ -66,12 +68,19 @@ int main(int, char **)
 		cpt++;
 	}
 
-	
+	//Calcul d'une 100eme generation de la premiere donnee
+	Population P(taille_pop, (data_tab[0]));
+	for (int i = 0;i < 100;i++) {
+		std::cout << i << "%" << std::endl;
+		file_popgen << i << ";" << P.get_makespan() << std::endl;
+		P.algo_genetique();
+	}
 
 	std::cout << "Temps de l'execution : " << (float)(clock() - chronometer) / CLOCKS_PER_SEC << std::endl;
 
 	file_makespan.close();
 	file_time.close();
+	file_popgen.close();
 
 	return 0;
 }
