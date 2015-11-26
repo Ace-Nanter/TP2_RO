@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <vector>
 #include <stack>
+#include <fstream>
 
 #include "data.h"
 
@@ -20,7 +21,7 @@ struct liste_machines {
 	unsigned			duree;			// Date de l'opération
 
 	liste_machines() :last_op(nullptr), duree(0) { }
-	void afficher_sequence();	// Affiche les opérations de chaque machine
+	void afficher_sequence();			// Affiche les opérations de chaque machine
 	void afficher_sequence_reverse();
 
 };
@@ -62,6 +63,7 @@ public:
 	void afficher_chemin_critique();				// Affiche le chemin critique
 	void afficher_bierwirth();						// Affiche le vecteur de Bierwirth
 	void recherche_locale();						// Lance l'algorithme de recherche locale
+	void recherche_locale(std::ofstream& f);
 
 	Bierwirth &Bierwirth::operator=(const Bierwirth&);
 

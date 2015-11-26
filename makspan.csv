@@ -1,0 +1,340 @@
+Data 0
+Recherche locale;1120;1071;1038;1021;994;946;915;913;860;
+Premiere iteration de l'algo genetique : 
+Algo genetique
+Initial best makespan; 742
+Initial worst makespan; 1276
+New best makespan; 706
+New worst makespan; 958
+
+Cinquieme iteration de l'algo genetique : 
+Algo genetique
+Initial best makespan; 685
+Initial worst makespan; 835
+New best makespan; 678
+New worst makespan; 824
+
+
+Data 1
+Recherche locale;
+Premiere iteration de l'algo genetique : 
+Algo genetique
+Initial best makespan; 701
+Initial worst makespan; 1150
+New best makespan; 683
+New worst makespan; 890
+
+Cinquieme iteration de l'algo genetique : 
+Algo genetique
+Initial best makespan; 644
+Initial worst makespan; 794
+New best makespan; 635
+New worst makespan; 787
+
+
+Data 2
+Recherche locale;1035;973;
+Premiere iteration de l'algo genetique : 
+Algo genetique
+Initial best makespan; 618
+Initial worst makespan; 1066
+New best makespan; 588
+New worst makespan; 799
+
+Cinquieme iteration de l'algo genetique : 
+Algo genetique
+Initial best makespan; 588
+Initial worst makespan; 708
+New best makespan; 588
+New worst makespan; 696
+
+
+Data 3
+Recherche locale;993;985;964;938;916;891;889;849;844;
+Premiere iteration de l'algo genetique : 
+Algo genetique
+Initial best makespan; 687
+Initial worst makespan; 1188
+New best makespan; 639
+New worst makespan; 863
+
+Cinquieme iteration de l'algo genetique : 
+Algo genetique
+Initial best makespan; 621
+Initial worst makespan; 761
+New best makespan; 621
+New worst makespan; 754
+
+
+Data 4
+Recherche locale;886;838;810;786;774;762;735;
+Premiere iteration de l'algo genetique : 
+Algo genetique
+Initial best makespan; 607
+Initial worst makespan; 1058
+New best makespan; 593
+New worst makespan; 806
+
+Cinquieme iteration de l'algo genetique : 
+Algo genetique
+Initial best makespan; 593
+Initial worst makespan; 713
+New best makespan; 593
+New worst makespan; 707
+
+
+Data 5
+Recherche locale;
+Premiere iteration de l'algo genetique : 
+Algo genetique
+Initial best makespan; 985
+Initial worst makespan; 1563
+New best makespan; 960
+New worst makespan; 1212
+
+Cinquieme iteration de l'algo genetique : 
+Algo genetique
+Initial best makespan; 926
+Initial worst makespan; 1072
+New best makespan; 926
+New worst makespan; 1066
+
+
+Data 6
+Recherche locale;1161;1139;1125;1116;1109;1071;1059;
+Premiere iteration de l'algo genetique : 
+Algo genetique
+Initial best makespan; 955
+Initial worst makespan; 1563
+New best makespan; 895
+New worst makespan; 1141
+
+Cinquieme iteration de l'algo genetique : 
+Algo genetique
+Initial best makespan; 869
+Initial worst makespan; 1001
+New best makespan; 869
+New worst makespan; 993
+
+
+Data 7
+Recherche locale;1373;1335;1326;1313;1290;1285;1247;1238;1237;1235;1228;1220;
+Premiere iteration de l'algo genetique : 
+Algo genetique
+Initial best makespan; 996
+Initial worst makespan; 1568
+New best makespan; 863
+New worst makespan; 1166
+
+Cinquieme iteration de l'algo genetique : 
+Algo genetique
+Initial best makespan; 863
+Initial worst makespan; 1036
+New best makespan; 863
+New worst makespan; 1024
+
+
+Data 8
+Recherche locale;1415;1350;
+Premiere iteration de l'algo genetique : 
+Algo genetique
+Initial best makespan; 1023
+Initial worst makespan; 1685
+New best makespan; 992
+New worst makespan; 1295
+
+Cinquieme iteration de l'algo genetique : 
+Algo genetique
+Initial best makespan; 951
+Initial worst makespan; 1111
+New best makespan; 951
+New worst makespan; 1095
+
+
+Data 9
+Recherche locale;1226;1182;1172;1124;
+Premiere iteration de l'algo genetique : 
+Algo genetique
+Initial best makespan; 1038
+Initial worst makespan; 1579
+New best makespan; 967
+New worst makespan; 1254
+
+Cinquieme iteration de l'algo genetique : 
+Algo genetique
+Initial best makespan; 958
+Initial worst makespan; 1100
+New best makespan; 958
+New worst makespan; 1087
+
+
+Data 10
+Recherche locale;1505;1471;1450;1449;1437;1435;1424;1397;
+Premiere iteration de l'algo genetique : 
+Algo genetique
+Initial best makespan; 1297
+Initial worst makespan; 1955
+New best makespan; 1290
+New worst makespan; 1548
+
+Cinquieme iteration de l'algo genetique : 
+Algo genetique
+Initial best makespan; 1222
+Initial worst makespan; 1399
+New best makespan; 1222
+New worst makespan; 1386
+
+
+Data 11
+Recherche locale;1402;1397;1389;1375;1343;1335;
+Premiere iteration de l'algo genetique : 
+Algo genetique
+Initial best makespan; 1184
+Initial worst makespan; 1923
+New best makespan; 1149
+New worst makespan; 1424
+
+Cinquieme iteration de l'algo genetique : 
+Algo genetique
+Initial best makespan; 1079
+Initial worst makespan; 1235
+New best makespan; 1059
+New worst makespan; 1204
+
+
+Data 12
+Recherche locale;1854;1813;1782;1697;
+Premiere iteration de l'algo genetique : 
+Algo genetique
+Initial best makespan; 1256
+Initial worst makespan; 2138
+New best makespan; 1246
+New worst makespan; 1515
+
+Cinquieme iteration de l'algo genetique : 
+Algo genetique
+Initial best makespan; 1150
+Initial worst makespan; 1359
+New best makespan; 1150
+New worst makespan; 1330
+
+
+Data 13
+Recherche locale;1723;1697;1650;1635;1622;1609;
+Premiere iteration de l'algo genetique : 
+Algo genetique
+Initial best makespan; 1319
+Initial worst makespan; 2106
+New best makespan; 1310
+New worst makespan; 1618
+
+Cinquieme iteration de l'algo genetique : 
+Algo genetique
+Initial best makespan; 1292
+Initial worst makespan; 1441
+New best makespan; 1292
+New worst makespan; 1419
+
+
+Data 14
+Recherche locale;1569;1541;1527;1503;1499;
+Premiere iteration de l'algo genetique : 
+Algo genetique
+Initial best makespan; 1319
+Initial worst makespan; 1992
+New best makespan; 1265
+New worst makespan; 1584
+
+Cinquieme iteration de l'algo genetique : 
+Algo genetique
+Initial best makespan; 1224
+Initial worst makespan; 1400
+New best makespan; 1224
+New worst makespan; 1374
+
+
+Data 15
+Recherche locale;1422;1404;1358;
+Premiere iteration de l'algo genetique : 
+Algo genetique
+Initial best makespan; 1039
+Initial worst makespan; 1728
+New best makespan; 1024
+New worst makespan; 1259
+
+Cinquieme iteration de l'algo genetique : 
+Algo genetique
+Initial best makespan; 953
+Initial worst makespan; 1131
+New best makespan; 953
+New worst makespan; 1113
+
+
+Data 16
+Recherche locale;1252;1249;1207;1198;
+Premiere iteration de l'algo genetique : 
+Algo genetique
+Initial best makespan; 959
+Initial worst makespan; 1474
+New best makespan; 909
+New worst makespan; 1175
+
+Cinquieme iteration de l'algo genetique : 
+Algo genetique
+Initial best makespan; 851
+Initial worst makespan; 1006
+New best makespan; 851
+New worst makespan; 993
+
+
+Data 17
+Recherche locale;1537;1430;1357;1317;1310;
+Premiere iteration de l'algo genetique : 
+Algo genetique
+Initial best makespan; 990
+Initial worst makespan; 1642
+New best makespan; 922
+New worst makespan; 1246
+
+Cinquieme iteration de l'algo genetique : 
+Algo genetique
+Initial best makespan; 882
+Initial worst makespan; 1081
+New best makespan; 882
+New worst makespan; 1066
+
+
+Data 18
+Recherche locale;1385;1329;
+Premiere iteration de l'algo genetique : 
+Algo genetique
+Initial best makespan; 1075
+Initial worst makespan; 1807
+New best makespan; 1032
+New worst makespan; 1295
+
+Cinquieme iteration de l'algo genetique : 
+Algo genetique
+Initial best makespan; 922
+Initial worst makespan; 1128
+New best makespan; 922
+New worst makespan; 1102
+
+
+Data 19
+Recherche locale;1412;1408;1397;1340;1318;1262;1258;
+Premiere iteration de l'algo genetique : 
+Algo genetique
+Initial best makespan; 1049
+Initial worst makespan; 1734
+New best makespan; 1049
+New worst makespan; 1305
+
+Cinquieme iteration de l'algo genetique : 
+Algo genetique
+Initial best makespan; 965
+Initial worst makespan; 1140
+New best makespan; 933
+New worst makespan; 1119
+
+

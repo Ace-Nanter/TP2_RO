@@ -21,15 +21,27 @@ Population::Population(unsigned taille,Data& d):taille_(taille),d_(d)
 
 Population::Population::~Population(){}
 
+
+void Population::algo_genetique() {
+	std::ofstream f;
+	algo_genetique(f);
+}
+
 //On divise les individu en 2 genes (coupe a la moitier)
 //On va proceder par une selection par rang 
 //le premier des genes retenus se trouve dans les 20% meilleurs resultats
 //Le 2 eme est pris uniformement sur les parents
 //seed du mersen twistter "bierwirth"
-void Population::algo_genetique() {
+void Population::algo_genetique(std::ofstream& file) {
 	//Initialisation du mersenne twistter
 	std::string seed_str("bierwirth");
 	std::seed_seq seed (seed_str.begin(),seed_str.end());
+	
+	if (file) {
+		file << "Algo genetique" << std::endl;
+		file << "Initial best makespan; " << P_[0].makespan_ << std::endl;
+		file << "Initial worst makespan; " << P_[P_.size() - 1].makespan_ << std::endl;
+	}
 
 	unsigned delimiteur = (unsigned)(P_[0].bierwirth_vector_.size() / 2);	//delimiteur de la partie Pere/Mere des parents (ici a la moiter)
 	std::vector<unsigned> gene(2);											//numeros des individus à melanger dans l'enfant
@@ -65,7 +77,13 @@ void Population::algo_genetique() {
 		P_enf.push_back(Bierwirth(b_temp));	//On ajoute le nouvel individu a la population enfant
 	}
 	std::sort(P_enf.begin(), P_enf.end(), sorting_function_bierwirth);	//trie de la population enfant
-	fusion(P_enf);														//On fait une union de P_enf et on obtient la nouvelle population
+	fusion(P_enf);	
+	//On fait une union de P_enf et on obtient la nouvelle population
+	if (file) {
+		file << "New best makespan; " << P_[0].makespan_ << std::endl;
+		file << "New worst makespan; " << P_[P_.size() - 1].makespan_ << std::endl;
+		file << std::endl;
+	}
 }
 
 void Population::fusion(const std::vector<Bierwirth>& P_enf)
@@ -78,16 +96,15 @@ void Population::fusion(const std::vector<Bierwirth>& P_enf)
 	P_.resize(taille_, P_enf[0]);									//On recoupe pour avoir une population de la bonne taille
 }
 
-void Population::afficher_makespan(unsigned n)
+
+void Population::afficher_makespan(unsigned n, std::ostream& o)
 {
 	for (unsigned i = 0;i < n && i < taille_;i++) {
 		std::cout << "n" << i << " " << P_[i].get_makespan_() << std::endl;
 	}
 }
 
-//affiche les makespans de tous les individus
-void Population::afficher_makespan()
-{
+void Population::afficher_makespan() {
 	afficher_makespan(taille_);
 }
 
